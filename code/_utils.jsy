@@ -1,0 +1,12 @@
+
+export function room_id(allow_create) ::
+  let {hash} = window.location
+  if ! hash ::
+    if ! allow_create ::
+      throw new Error('room_id not found in location.hash')
+
+    window.location.hash = hash =
+      '#'+Math.random().toString(36).slice(2)
+
+  return hash.slice(1)
+

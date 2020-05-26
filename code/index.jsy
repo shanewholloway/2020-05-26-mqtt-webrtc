@@ -1,0 +1,41 @@
+import {rtc_mqtt_server, rtc_mqtt_client} from './rtc_over_mqtt.jsy'
+import {room_id} from './_utils.jsy'
+import {add_output, all_chans} from './ui_misc.jsy'
+
+const websock = 0
+  ? 'ws://127.0.0.1:9001'
+  : 'wss://test.mosquitto.org:8081'
+
+
+export async function main_server() ::
+  await rtc_mqtt_server @:
+    websock, topic: `swh/${room_id()}`,
+    on_connection(rtc_peerconn) ::
+      const chan = rtc_channel(rtc_peerconn)
+      console.log @ 'server conn:', chan
+
+
+export async function main_client() ::
+  await new Promise @ y => setTimeout(y, 100)
+
+  rtc_mqtt_client @:
+    websock, topic: `swh/${room_id()}`,
+    on_connection(rtc_peerconn) ::
+      const chan = rtc_channel(rtc_peerconn)
+      console.log @ 'client conn:', chan
+
+
+function rtc_channel(rtc_peerconn) ::
+  const chan = rtc_peerconn.createDataChannel @ 'mqtt-test', @{}
+    id: 0, negotiated: true, //maxRetransmits: 1,
+
+  return Object.assign @ chan, @{}
+    binaryType: 'arraybuffer'
+    onopen() :: all_chans.add(chan)
+    onclose() :: all_chans.delete(chan)
+    onmessage({data}) ::
+      const msg = JSON.parse(data)
+      msg.ts = Date.now() - msg.ts
+      console.log @ `${chan.label}::msg`, msg
+      add_output(false, msg)
+

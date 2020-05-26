@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>JSY-Web Development Sandbox</title>
+
+  <link rel='icon' href='data:image/png;base64,' />
+  <link rel='stylesheet' crossorigin='anonymous' href='https://cdn.jsdelivr.net/npm/shoelace-css@1.0.0-beta24/dist/shoelace.css' />
+
+  <style>
+    body>main { max-width: 40em; margin: auto; }
+  </style>
+
+  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/npm/superfine@7.0.0/dist/superfine.min.js'></script>
+</head>
+
+<body>
+
+<main>
+  <h1>MQTT & WebRTC Client</h1>
+
+  <form id='frm_input'>
+    <input autofocus name='msg'></input>
+    <button>Send</button>
+  </form>
+
+  <pre id='output'>
+  </pre>
+</main>
+
+<script type=module>
+  import {main_client} from './esm/index.mjs'
+  main_client()
+</script>
+</body>
+</html>

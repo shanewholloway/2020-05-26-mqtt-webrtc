@@ -1,0 +1,30 @@
+/// DOCUMENT INTERACTION ///
+
+export function add_output(from_me, {ts, ... msg}) ::
+  const el = document.createElement('output')
+  el.style = `color: ${from_me ? 'blue' : 'green'}`
+  el.textContent = '\n' + JSON.stringify(msg) + '\n'
+  document.getElementById('output').appendChild(el)
+
+export const all_chans = new Set()
+
+window.swh_send_all = @\ msg ::
+  if 'string' === typeof msg ::
+    msg = {sz: msg}
+
+  msg.ts = Date.now()
+  const data = JSON.stringify(msg)
+
+  add_output(true, msg)
+  for const ea of all_chans.values() ::
+    ea.send(data)
+
+document.getElementById('frm_input')
+.addEventListener @ 'submit', evt => ::
+  evt.preventDefault()
+  const el_msg = evt.target.elements.msg
+  const msg = el_msg.value
+  if msg ::
+    window.swh_send_all @ msg
+    el_msg.value = ''
+
