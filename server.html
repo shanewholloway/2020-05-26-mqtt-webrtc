@@ -13,13 +13,14 @@
   </style>
 
   <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/npm/superfine@7.0.0/dist/superfine.min.js'></script>
-  <script src='/livereload.js'></script>
 </head>
 
 <body>
 
 <main>
   <h1>MQTT & WebRTC Server</h1>
+
+  <a id='client_href' href='index.html'>New client for #hash</a>
 
   <form id='frm_input'>
     <input autofocus name='msg'></input>
@@ -31,6 +32,15 @@
 </main>
 
 <script type=module>
+  {
+    if (!location.hash.slice(1))
+      location.hash = '#' + Math.random().toString(36).slice(2)
+
+    const a = document.getElementById('client_href')
+    a.href = `index.html${location.hash}`
+    a.textContent = `New client for ${location.hash}`
+  }
+
   import {main_server} from './esm/index.mjs'
   main_server()
 </script>

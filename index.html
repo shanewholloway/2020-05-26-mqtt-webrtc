@@ -20,6 +20,8 @@
 <main>
   <h1>MQTT & WebRTC Client</h1>
 
+  <a id='client_href' href='index.html'>New client for #hash</a>
+
   <form id='frm_input'>
     <input autofocus name='msg'></input>
     <button>Send</button>
@@ -30,6 +32,14 @@
 </main>
 
 <script type=module>
+  if (!location.hash.slice(1)) {
+    location.replace('server.html#'+Math.random().toString(36).slice(2))
+  } else {
+    const a = document.getElementById('client_href')
+    a.href = `index.html${location.hash}`
+    a.textContent = `New client for ${location.hash}`
+  }
+
   import {main_client} from './esm/index.mjs'
   main_client()
 </script>
